@@ -1,6 +1,7 @@
 // @flow
 import {createAction} from 'redux-actions'
 import axios from 'axios'
+import {pathOr} from 'ramda'
 
 import {setLoading,resetLoading} from '../../../utils'
 import type {CaseReducer } from '../../../types'
@@ -11,11 +12,12 @@ const getPhotoListAPI = () => axios.get('https://jsonplaceholder.typicode.com/ph
 
 const action = createAction(actionType,getPhotoListAPI)
 
+const getPhotoListData = pathOr([],['data'])
 const getPhotoList: CaseReducer = (state ,{payload}) => {
-  const {data} = payload
+
   return {
     ...state,
-    photoList: [...state.photoList,...data],
+    photoList: getPhotoListData(payload),
     loading: false
   }
 }
